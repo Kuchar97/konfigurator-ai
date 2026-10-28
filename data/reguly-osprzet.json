@@ -1,0 +1,782 @@
+{
+ "_opis": "Reguły doboru osprzętu elektroinstalacyjnego – przeniesione z AI Takeoff (takeoff/match.py, DEFAULT_RULES). Pozycja zapytania (znormalizowana nazwa, np. „Łącznik schodowy podwójny”) → składniki (produkty) w wybranej serii i kolorze. Pierwsza pasująca reguła wygrywa. Składnik: zawiera = wszystkie frazy w nazwie produktu („a|b” = a albo b), bez = żadna z fraz; kod = symbol lub jego początek; ilosc = sztuk na punkt ({1} = liczba z nazwy pozycji). ramka: 0 = bez ramki, liczba = ramka n-krotna; domyślnie tyle, ile modułów. regula: null = nie osprzęt (bez produktu). Listy „@nazwa” – z sekcji listy.",
+ "_wersja": "2026-10-27.1",
+ "_zrodlo": "AI Takeoff (j-sobotka/electrical-takeoff), docs/domain/kontakt-simon.md",
+ "listy": {
+  "gniazdoBez": [
+   "podwójn",
+   "schuko",
+   "data",
+   "bez uziemienia",
+   "bez przesłon",
+   "usb",
+   "niezmienn",
+   "antybakter",
+   "ip44",
+   "bryzgo",
+   "europejsko",
+   "amerykańsk",
+   "brytyjsk",
+   "szwajcarsk",
+   "włosk"
+  ],
+  "klawiszBez": [
+   "oczk",
+   "piktogram",
+   "pikotgram",
+   "antybakter",
+   "podświetl",
+   "kluczyk",
+   "sw31",
+   "hotel",
+   "l.01/"
+  ],
+  "lacznikBez": [
+   "podświetl",
+   "sygnaliz",
+   "kluczyk",
+   "ip44",
+   "podwójn",
+   "bez piktogramu",
+   "hotelow"
+  ]
+ },
+ "reguly": [
+  {
+   "wzor": "wyjście kablowe|wypust kablow|indukc",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "wyjście kablowe",
+       "(moduł)"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "głośnik\\S* (\\d)-krotn",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo głośnikowe",
+       "{1}-krotne",
+       "(moduł)"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "głośnik",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo głośnikowe",
+       "(moduł)"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "hdmi",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo",
+       "hdmi",
+       "(moduł)"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "gniazdo telefoniczne|telefon",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo telefoniczne",
+       "(moduł)"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "lampa|lamp\\b|wypust|oprawa|kinkiet|downlight|led\\b|klimaty|\\bkl\\b|puszka agd|okap|domofon|rozdzielnic|licznik|floorbox",
+   "regula": null
+  },
+  {
+   "wzor": "\\bramka (\\d)-krotn",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "ramka {1}-krotna"
+      ],
+      "bez": [
+       "karton-gips",
+       "antybakter"
+      ]
+     }
+    ],
+    "ramka": 0
+   }
+  },
+  {
+   "wzor": "(\\d)\\s*x\\s*\\+\\s*rj ?45",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo wtyczkowe",
+       "z uziemieniem",
+       "przesłon",
+       "(moduł)"
+      ],
+      "bez": "@gniazdoBez",
+      "ilosc": "{1}",
+      "czesc": "gniazdo"
+     },
+     {
+      "zawiera": [
+       "gniazdo komputerowe",
+       "rj45",
+       "pojedyncz",
+       "6"
+      ],
+      "bez": [
+       "ekranowan",
+       "telefon",
+       "5e"
+      ],
+      "ilosc": 1,
+      "czesc": "gniazdo komputerowe"
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "komputerowe podwójne|podwójne rj ?45",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo komputerowe podwójne",
+       "rj45",
+       "6"
+      ],
+      "bez": [
+       "ekranowan",
+       "telefon",
+       "5e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "rj ?45|komputer|\\blan\\b|internet",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo komputerowe",
+       "rj45",
+       "pojedyncz",
+       "6"
+      ],
+      "bez": [
+       "ekranowan",
+       "telefon",
+       "5e"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "\\bz\\.?tv\\b|\\brtv\\b|r-tv|antenow|\\btv\\b",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo antenowe",
+       "r-tv",
+       "końcow"
+      ],
+      "bez": [
+       "data",
+       "przelotow",
+       "podwójn"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "(gniazd).*(ip ?44|szczeln|bryzgo|hermetyczn)|szczeln",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo wtyczkowe",
+       "ip44",
+       "(moduł)"
+      ],
+      "bez": [
+       "schuko",
+       "podwójn",
+       "bez uszczelki",
+       "antybakter",
+       "bez uziemienia"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "gniazdo wtyczkowe podwójne",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo wtyczkowe",
+       "podwójne",
+       "z uziemieniem",
+       "przesłon",
+       "(moduł)"
+      ],
+      "bez": [
+       "schuko",
+       "data",
+       "bez uziemienia",
+       "bez przesłon",
+       "usb",
+       "niezmienn",
+       "antybakter",
+       "ip44",
+       "bryzgo",
+       "europejsko",
+       "amerykańsk",
+       "brytyjsk",
+       "szwajcarsk",
+       "włosk"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "ładowark|\\busb\\b",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "ładowarka",
+       "usb",
+       "(moduł)"
+      ],
+      "bez": [
+       "samoch"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "\\bdata\\b",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo",
+       "data",
+       "klucz",
+       "(moduł)"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "gniazd",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "gniazdo wtyczkowe",
+       "z uziemieniem",
+       "przesłon",
+       "(moduł)"
+      ],
+      "bez": "@gniazdoBez"
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "klawisz do łącznika schodowego podw",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "klawisz",
+       "sw6/2"
+      ],
+      "bez": "@klawiszBez"
+     }
+    ],
+    "ramka": 0
+   }
+  },
+  {
+   "wzor": "klawisz do łącznika krzyżowego podw",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "klawisz",
+       "sw7/2"
+      ],
+      "bez": "@klawiszBez"
+     }
+    ],
+    "ramka": 0
+   }
+  },
+  {
+   "wzor": "klawisz do łącznika świecznik",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "klawisz",
+       "sw5m|świecznik"
+      ],
+      "bez": [
+       "oczk",
+       "piktogram",
+       "pikotgram",
+       "antybakter",
+       "podświetl",
+       "kluczyk",
+       "sw31",
+       "hotel",
+       "l.01/",
+       "sw6/2",
+       "szp2",
+       "szw2"
+      ]
+     }
+    ],
+    "ramka": 0
+   }
+  },
+  {
+   "wzor": "klawisz do łącznika roletow",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "klawisz",
+       "rolet"
+      ],
+      "bez": "@klawiszBez"
+     }
+    ],
+    "ramka": 0
+   }
+  },
+  {
+   "wzor": "klawisz do łącznika dwubieg",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "klawisz",
+       "dwubieg"
+      ],
+      "bez": "@klawiszBez"
+     }
+    ],
+    "ramka": 0
+   }
+  },
+  {
+   "wzor": "klawisz do łącznika",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "klawisz",
+       "sw1m|pojedynczy"
+      ],
+      "bez": [
+       "oczk",
+       "piktogram",
+       "pikotgram",
+       "antybakter",
+       "podświetl",
+       "kluczyk",
+       "sw31",
+       "hotel",
+       "l.01/",
+       "podwójn",
+       "świecznik",
+       "rolet",
+       "sw5m"
+      ]
+     }
+    ],
+    "ramka": 0
+   }
+  },
+  {
+   "wzor": "schodowy podw|podwójny schod",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "łącznik schodowy podwójny",
+       "(moduł)"
+      ],
+      "bez": [
+       "podświetl",
+       "sygnaliz",
+       "kluczyk",
+       "ip44",
+       "bez piktogramu",
+       "hotelow"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "krzyżowy podw|podwójny krzyż",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "łącznik krzyżowy podwójny",
+       "(moduł)"
+      ],
+      "bez": [
+       "podświetl",
+       "sygnaliz",
+       "kluczyk",
+       "ip44",
+       "bez piktogramu",
+       "hotelow"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "świecznik",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "łącznik świecznikowy",
+       "(moduł)"
+      ],
+      "bez": "@lacznikBez"
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "schod",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "łącznik schodowy",
+       "(moduł)"
+      ],
+      "bez": "@lacznikBez"
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "krzyż",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "łącznik krzyżowy",
+       "(moduł)"
+      ],
+      "bez": "@lacznikBez"
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "rolet",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "roletow",
+       "(moduł)"
+      ],
+      "bez": [
+       "podwójn",
+       "kluczyk",
+       "wielu miejsc",
+       "elektroniczn"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "dzwon|przycisk",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "przycisk",
+       "dzwonek",
+       "(moduł)"
+      ],
+      "bez": [
+       "podświetl"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "ściemn",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "ściemniacz",
+       "(moduł)"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "termostat|termoregul",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "termostat"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "czujnik ruchu",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "czujnikiem ruchu",
+       "(moduł)"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "dwubieg|2[ -]?biegun",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "łącznik dwubiegunowy",
+       "(moduł)"
+      ],
+      "bez": "@lacznikBez"
+     }
+    ]
+   }
+  },
+  {
+   "wzor": "łącznik|wyłącznik",
+   "regula": {
+    "skladniki": [
+     {
+      "zawiera": [
+       "łącznik jednobiegunowy",
+       "(moduł)"
+      ],
+      "bez": [
+       "podświetl",
+       "sygnaliz",
+       "kluczyk",
+       "ip44",
+       "podwójn",
+       "bez piktogramu",
+       "hotelow",
+       "dwubieg"
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "_serieOpis": "Serie osprzętu do wyboru (grupy cennika). rodzinyRamek: gdzie szukać ramek danej serii (Simon 54/82/Basic mają ramki w osobnych grupach). bezRamek: monobloki/natynkowe. uniwersalne: grupy dołączane do każdej serii (wkłady keystone).",
+ "serie": [
+  "Simon 10",
+  "Simon 24",
+  "Simon 54",
+  "Simon 55",
+  "Simon 82",
+  "Simon 100",
+  "Simon Basic",
+  "Simon Akord",
+  "Simon Aquaclick",
+  "Simon Aquarius"
+ ],
+ "_koloryModulowOpis": "Kolory modułów do wyboru w serii (kolejność = kolejność na liście, pierwszy = domyślny). Z cennika: kolory, w których są i gniazdo, i łącznik jednobiegunowy (bez kolorów ramek, klawiszy, gniazd DATA). Seria bez wpisu – kolory liczone tak samo automatycznie. DO POTWIERDZENIA z katalogiem: Simon 54 (dokumentacja AI Takeoff podaje 6), Simon Basic (7), Simon 82 (pokrywy).",
+ "koloryModulow": {
+  "Simon 10": [
+   "biały",
+   "kremowy",
+   "czarny"
+  ],
+  "Simon 24": [
+   "biały",
+   "kaszmirowy",
+   "szampański mat",
+   "grafitowy mat",
+   "czarny mat"
+  ],
+  "Simon 54": [
+   "biały",
+   "kremowy",
+   "kaszmirowy",
+   "srebrny mat",
+   "złoty mat",
+   "brąz mat",
+   "antracyt",
+   "czarny"
+  ],
+  "Simon 55": [
+   "biały mat",
+   "jasnoszary mat",
+   "grafitowy mat",
+   "kaszmirowy",
+   "aluminium mat",
+   "szampański mat",
+   "czarny mat"
+  ],
+  "Simon 82": [
+   "biały",
+   "grafit",
+   "aluminium"
+  ],
+  "Simon 100": [
+   "biały",
+   "czarny",
+   "biały mat",
+   "czarny mat"
+  ],
+  "Simon Basic": [
+   "biały",
+   "beż",
+   "stal inox",
+   "satynowy",
+   "srebrny mat",
+   "czarny"
+  ],
+  "Simon Akord": [
+   "biały",
+   "beż",
+   "aluminiowy",
+   "satynowy",
+   "czarny mat"
+  ],
+  "Simon Aquaclick": [
+   "biały",
+   "ciemnoszary",
+   "czarny"
+  ],
+  "Simon Aquarius": [
+   "biały"
+  ]
+ },
+ "_linieRamekOpis": "Linie ramek do wyboru w serii: grupa cennika + opcjonalnie fraza w nazwie ramki (Simon 55 ma LINE/DUO/Nature w jednej grupie). Pierwsza = domyślna. Serie bez wpisu (Simon 10, 24, 100…) – ramki z własnej grupy, bez wyboru linii. bez = frazy wykluczane z automatycznego doboru ramki.",
+ "linieRamek": {
+  "Simon 55": [
+   {
+    "nazwa": "LINE",
+    "grupa": "Simon 55",
+    "zawiera": "line"
+   },
+   {
+    "nazwa": "DUO",
+    "grupa": "Simon 55",
+    "zawiera": "duo"
+   },
+   {
+    "nazwa": "Nature",
+    "grupa": "Simon 55",
+    "zawiera": "nature"
+   }
+  ],
+  "Simon 54": [
+   {
+    "nazwa": "Premium",
+    "grupa": "Simon 54 Premium"
+   },
+   {
+    "nazwa": "Nature",
+    "grupa": "Simon 54 Nature"
+   }
+  ],
+  "Simon 82": [
+   {
+    "nazwa": "Detail",
+    "grupa": "Simon 82 Detail"
+   },
+   {
+    "nazwa": "Nature",
+    "grupa": "Simon 82 Nature"
+   }
+  ],
+  "Simon Basic": [
+   {
+    "nazwa": "Standard",
+    "grupa": "Simon Basic Standard"
+   },
+   {
+    "nazwa": "Neos",
+    "grupa": "Simon Basic Neos"
+   }
+  ]
+ },
+ "ramkaBez": [
+  "karton-gips",
+  "antybakter",
+  "bryzgoszczeln"
+ ],
+ "bezRamek": [
+  "Simon Akord",
+  "Simon Aquaclick",
+  "Simon Aquarius"
+ ],
+ "uniwersalne": [
+  "wkłady komp. i tel."
+ ]
+}
